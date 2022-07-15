@@ -32,6 +32,7 @@ options = trainingOptions(metodoOptim,...
     'Plots','training-progress');
 
 %% SCELTA PREPROCESSING
+% type:
 % 1 --> globalTraining
 % 2 --> localTraining
 % 3 --> combinedTraining
@@ -43,7 +44,7 @@ options = trainingOptions(metodoOptim,...
 % 9 --> LBP
 % else --> nessun preprocessing eccetto resize_image
 
-type=8; % variabile che identifica il tipo di preprocessing
+type=5; % variabile che identifica il tipo di preprocessing
 
 
 %% 2-FOLD TRAINING E TESTING
@@ -68,10 +69,11 @@ for fold=1:NF
     for pattern=1:(DIM1)
         IM=NX{DIV(fold,pattern)};%singola data immagini
         IM=rgb2gray(IM);
-            % adattamento della dimensione dell'immagine mantenendo le
-            % proporzioni
-        paddedImage = resize_image(IM); %aggiungo padding con bianco
-            
+           
+        %inserire qui eventuale pre-processing sull'immagine IM
+
+        % adattamento della dimensione dell'immagine mantenendo le proporzioni
+        paddedImage = resize_image(IM); % aggiungo padding con bianco
            if type==1 % global features training
                IM=globalTraining(paddedImage);
            elseif type==2 % local features training
@@ -86,7 +88,7 @@ for fold=1:NF
                IM=paddedImage;
                IM = imbilatfilt(IM);
                IM = imadjust(IM);
-               IM = imsharpen(IM);  
+               IM = imsharpen(IM);
            elseif type==6 % training filtro anisotropico
                IM=paddedImage;
                IM = imdiffusefilt(IM);
@@ -155,9 +157,9 @@ for fold=1:NF
     for pattern=ceil(DIM1)+1:ceil(DIM2)
         IM=NX{DIV(fold,pattern)};%singola data immagine
         IM=rgb2gray(IM);
-        paddedImage = resize_image(IM);
-            
+        
         %inserire qui eventuale pre-processing sull'immagine IM
+        paddedImage = resize_image(IM);
            if type==1 % global features training
                IM=globalTraining(paddedImage);
            elseif type==2 % local features training
